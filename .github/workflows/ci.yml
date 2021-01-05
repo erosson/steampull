@@ -40,10 +40,10 @@ jobs:
           STEAMPULL_USER: ${{ secrets.STEAMPULL_USER }}
           STEAMPULL_PASSWD: ${{ secrets.STEAMPULL_PASSWD }}
           STEAMPULL_SECRET: ${{ secrets.STEAMPULL_SECRET }}
-        run: ./steampull auth
+        run: bash -c './steampull auth'
       - run: ls
-      - run: ./steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\\\_\.index"
+      - run: bash -c './steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\\\_\.index"'
       - run: ls build
       - run: ls build/depot
       - run: ls build/depot/Bundles2
-      - run: ./steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\\\_\.index"
+      - run: bash -c './steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\\\_\.index"'
