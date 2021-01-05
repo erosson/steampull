@@ -21,11 +21,11 @@ jobs:
           STEAMPULL_SECRET: ${{ secrets.STEAMPULL_SECRET }}
         run: ./steampull auth
       - run: ls
-      - run: ./steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\_\.index"
+      - run: ./steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\\\_\.index"
       - run: ls build
       - run: ls build/depot
       - run: ls build/depot/Bundles2
-      - run: ./steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\_\.index"
+      - run: ./steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\\\_\.index"
   test-windows:
     runs-on: windows-latest
 
@@ -42,8 +42,8 @@ jobs:
           STEAMPULL_SECRET: ${{ secrets.STEAMPULL_SECRET }}
         run: ./steampull auth
       - run: ls
-      - run: ./steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\_\.index"
+      - run: ./steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\\\_\.index"
       - run: ls build
       - run: ls build/depot
       - run: ls build/depot/Bundles2
-      - run: ./steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\_\.index"
+      - run: ./steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\\\_\.index"
