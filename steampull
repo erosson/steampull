@@ -73,8 +73,11 @@ main () {
   shift $((OPTIND-1)) # drops flags from $@
 
   if [ -z "${1+x}" ]; then die-usage; fi
-  case "$1" in
+  COMMAND="$1"
+  shift
+  case "$COMMAND" in
     dump)
+      set +u
       echo STEAMPULL_USER: $STEAMPULL_USER
       # echo STEAMPULL_PASSWD: $STEAMPULL_PASSWD
       # echo STEAMPULL_SECRET: $STEAMPULL_SECRET
@@ -83,6 +86,7 @@ main () {
       echo STEAMPULL_APP: $STEAMPULL_APP
       echo STEAMPULL_DEPOT: $STEAMPULL_DEPOT
       echo STEAMPULL_OUTPUT: $STEAMPULL_OUTPUT
+      echo COMMAND: $COMMAND
       echo "\$@: $@"
       ;;
     auth)
@@ -122,7 +126,7 @@ info () {
 }
 
 mv-info () {
-  mv --force --no-target-directory "$STEAMPULL_OUTPUT/info.txt" "$STEAMPULL_OUTPUT/info-old.txt" || true
+  mv --force --no-target-directory "$STEAMPULL_OUTPUT/info.txt" "$STEAMPULL_OUTPUT/info-old.txt" 2>/dev/null || true
   mv --force --no-target-directory "$STEAMPULL_OUTPUT/info-new.txt" "$STEAMPULL_OUTPUT/info.txt"
 }
 
@@ -136,9 +140,7 @@ fetch-changed () {
 }
 
 force-fetch () {
-  mkdir -p "$STEAMPULL_OUTPUT/depot"
-  cd "$STEAMPULL_OUTPUT/depot"
-  steamctl depot download --app $STEAMPULL_APP --depot $STEAMPULL_DEPOT "$@"
+  steamctl depot download --app $STEAMPULL_APP --depot $STEAMPULL_DEPOT --output "$STEAMPULL_OUTPUT/depot" "$@"
 }
 
 main "$@"
