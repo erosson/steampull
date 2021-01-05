@@ -72,7 +72,7 @@ main () {
   done
   shift $((OPTIND-1)) # drops flags from $@
 
-  if [ -z "${1+x}" ]; then die-usage; fi
+  if [ -z "${1+x}" ]; then usage; fi
   COMMAND="$1"
   shift
   case "$COMMAND" in

@@ -94,27 +94,35 @@ def login_with_2fa(steamctl, user, passwd):
     if index == 0:
         logprompt(child)
         child.sendline(passwd)
-        index = logexpect(child, ["Enter 2FA code:", xexpect.EOF])
-        # I don't understand why waitnoecho() is necessary - but without it,
-        # 2fa codes that match my phone's are consistently rejected
-        if hasattr(child, 'waitnoecho'):
-            child.waitnoecho()
-        if index == 0:
-            code = authenticator_code(steamctl=steamctl, user=user)
-            print("authenticator code 1:", str(code))
-            child.sendline(code)
-            # retry once
-            index = logexpect(child, ["Incorrect code. Enter 2FA code:", xexpect.EOF])
-            if hasattr(child, 'waitnoecho'):
-                child.waitnoecho()
+        tries = 0
+        max_tries = 3
+        success = False
+        while not success and tries < max_tries:
+            index = logexpect(child, [
+                "Enter 2FA code:" if tries == 0 else "Incorrect code. Enter 2FA code:",
+                xexpect.EOF,
+            ])
+
             if index == 0:
-                time.sleep(5)
+                # Input a 2fa code.
+                # I don't understand why waitnoecho() is necessary - but without it,
+                # 2fa codes that match my phone's are consistently rejected
+                if hasattr(child, 'waitnoecho'):
+                    child.waitnoecho()
+                else:
+                    time.sleep(10)
+
+                if tries > 0:
+                    time.sleep(5)
                 code = authenticator_code(steamctl=steamctl, user=user)
-                print("authenticator code 2:", str(code))
-                time.sleep(3)
-                # retry
+                print(f"authenticator code #{tries+1}:", str(code))
                 child.sendline(code)
-                logexpect(child, xexpect.EOF)
+            else:
+                success = True
+            tries += 1
+
+        if not success:
+            raise RuntimeException(f"too many authenticator failures: {max_tries}")
     elif index == 1:
         print("(already logged in, ignoring output)")
     exitstatus = child.wait()
