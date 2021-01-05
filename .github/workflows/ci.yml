@@ -42,8 +42,9 @@ jobs:
           STEAMPULL_SECRET: ${{ secrets.STEAMPULL_SECRET }}
         run: bash -c './steampull auth'
       - run: ls
-      - run: bash -c './steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\\\_\.index"'
+      # backslashes\\\\\\\\ are a bit ridiculous here, but it works
+      - run: bash -c './steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\\\\\\\_\\.index"'
       - run: ls build
       - run: ls build/depot
       - run: ls build/depot/Bundles2
-      - run: bash -c './steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\\\_\.index"'
+      - run: bash -c './steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\\\\\\\_\\.index"'
