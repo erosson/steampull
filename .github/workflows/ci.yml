@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - run: |
+          echo "::add-mask::${{ secrets.STEAMPULL_USER }}"
+          echo "::add-mask::${{ secrets.STEAMPULL_PASSWD }}"
+          echo "::add-mask::${{ secrets.STEAMPULL_SECRET }}"
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
@@ -30,6 +34,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - run: |
+          echo "::add-mask::${{ secrets.STEAMPULL_USER }}"
+          echo "::add-mask::${{ secrets.STEAMPULL_PASSWD }}"
+          echo "::add-mask::${{ secrets.STEAMPULL_SECRET }}"
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
