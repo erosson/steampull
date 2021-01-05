@@ -1,0 +1,41 @@
+name: push
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  test-ubuntu:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - run: pip install -r requirements.txt
+
+      - env:
+          STEAMCTL_USER: ${{ secrets.STEAMCTL_USER }}
+          STEAMCTL_PASSWD: ${{ secrets.STEAMCTL_PASSWD }}
+          STEAMCTL_SECRET: ${{ secrets.STEAMCTL_SECRET }}
+        run: ./steampull auth
+      - run: ./steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\_\.index"
+      - run: ./steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\_\.index"
+  test-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - run: pip install -r requirements-win.txt
+
+      - env:
+          STEAMCTL_USER: ${{ secrets.STEAMCTL_USER }}
+          STEAMCTL_PASSWD: ${{ secrets.STEAMCTL_PASSWD }}
+          STEAMCTL_SECRET: ${{ secrets.STEAMCTL_SECRET }}
+        run: ./steampull auth
+      - run: ./steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\_\.index"
+      - run: ./steampull --app 238960 --depot 238961 --output build fetch --regex "Bundles2\\_\.index"
